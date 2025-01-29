@@ -43,19 +43,18 @@ while run:
         subprocess.run([
             'ffmpeg',
             '-i', filen,                             # Input file
-            '-c:v', 'libx264',                       # Video codec (H.264)
-            '-c:a', 'aac',                           # Audio codec (AAC)
-            '-f', 'mpegts',                          # Use MPEG-TS container format
+            '-c:v', 'libx264',                       
+            '-c:a', 'aac',                           
+            '-f', 'mpegts',                         
             '-max_delay', '0',                       # Minimize delay
-            '-b:v', '2000k',                         # Video bitrate (adjust based on bandwidth)
+            '-b:v', '2000k',                         # Video bitrate 
             '-b:a', '128k',                          # Audio bitrate
-            '-g', '50',                              # Keyframe interval (for smoother streaming)
+            '-g', '50',                              # Keyframe interval
             '-r', '30',                              # Frame rate
             '-pkt_size', '1316',                     # Packet size to help reduce packet loss
-            '-flush_packets', '1',                   # Flush packets for better real-time streaming
-            '-f', 'mpegts',                          # Specify output format
+            '-flush_packets', '1',                   
+            '-f', 'mpegts',                          
             f'udp://{udp_ip}:{udp_port}'             # Output UDP stream destination
         ])
         
         print(f"Streaming to UDP://{udp_ip}:{udp_port}")
-
