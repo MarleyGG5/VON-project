@@ -42,7 +42,7 @@ while run:
 
         subprocess.run(['ffmpeg', '-i', filen, '-f', 
                         'rtp', '-vcodec', 'libx264', '-acodec', 
-                        'aac', '-bufsize', '2000k''-g', '50', f'rtp://{ipaddr}:{port}'
+                        'aac', '-bufsize', '2000k', '-g', '50', f'rtp://{ipaddr}:{port}'
                         ])
 
 
