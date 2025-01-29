@@ -37,7 +37,7 @@ while run:
     
     if menu == '4':
         filen = input('What file would you like to stream: ')
-        ipaddr = input('Enter the destination IP address (e.g., 127.0.0.1): ')
+        ipaddr = input('Enter the destination IP address (e.g., 192.168.2.1): ')
         port = input('Enter the port to stream to (e.g., 5000): ')
         
         # Stream over UDP
