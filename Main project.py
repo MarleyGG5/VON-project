@@ -34,3 +34,16 @@ while run:
 
         subprocess.run(['ffmpeg', '-i', f'{filen}', newtype])
         subprocess.run(['ffplay', newtype])
+    
+    if menu == '4':
+        filen = input('What file would you like to stream: ')
+        ipaddr = input('Enter the ip destination e.g (192.168.2.1): ')
+        port = input('Enter port to stream to e.g (5004): ')
+
+        subprocess.run(['ffmpeg', '-i', filen, '-f', 
+                        'rtp', '-vcodec', 'libx264', '-acodec', 
+                        'aac', '-bufsize', '2000k''-g', '50', f'rtp://{ipaddr}:{port}'
+                        ])
+
+
+        # to stream on reciving end ffplay rtp://<ip_address>:<Port>
