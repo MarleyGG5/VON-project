@@ -2,8 +2,7 @@ import subprocess
 
 run = True
 while run:
-
-    menu = input('What would you like to do: \n 1) Convert to different resolution \n 2) Change format \n 3) Change the file type \n 4) Stream video \n Q) Exit the programme \n')
+    menu = input('What would you like to do: \n 1) Convert to different resolution \n 2) Change format \n 3) Change the file type \n 4) Stream video via UDP \n Q) Exit the programme \n')
 
     if menu == 'Q':
         confirm = input('Are you sure you would like to quit the programme [Y/N] ')
@@ -37,17 +36,26 @@ while run:
     
     if menu == '4':
         filen = input('What file would you like to stream: ')
-        ipaddr = input('Enter the destination IP address (e.g., 192.168.2.1): ')
-        port = input('Enter the port to stream to (e.g., 5000): ')
+        udp_ip = input('Enter the UDP IP address (e.g., 127.0.0.1): ')
+        udp_port = input('Enter the UDP port (e.g., 1234): ')
         
-        # Stream over UDP
+        # Streaming over UDP with optimized settings
         subprocess.run([
             'ffmpeg',
-            '-i', filen,                        # Input file
-            '-c:v', 'libx264',                  # Video codec
-            '-c:a', 'aac',                      # Audio codec
-            '-f', 'mpegts',                     # MPEG Transport Stream format
-            f'udp://{ipaddr}:{port}'            # Output stream destination
+            '-i', filen,                             # Input file
+            '-c:v', 'libx264',                       # Video codec (H.264)
+            '-c:a', 'aac',                           # Audio codec (AAC)
+            '-f', 'mpegts',                          # Use MPEG-TS container format
+            '-max_delay', '0',                       # Minimize delay
+            '-b:v', '2000k',                         # Video bitrate (adjust based on bandwidth)
+            '-b:a', '128k',                          # Audio bitrate
+            '-g', '50',                              # Keyframe interval (for smoother streaming)
+            '-r', '30',                              # Frame rate
+            '-pkt_size', '1316',                     # Packet size to help reduce packet loss
+            '-flush_packets', '1',                   # Flush packets for better real-time streaming
+            '-f', 'mpegts',                          # Specify output format
+            f'udp://{udp_ip}:{udp_port}'             # Output UDP stream destination
         ])
         
-        print(f"Streaming to udp://{ipaddr}:{port}")
+        print(f"Streaming to UDP://{udp_ip}:{udp_port}")
+
