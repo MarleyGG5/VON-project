@@ -1,9 +1,9 @@
-import subprocess
+import subprocess  # Import the subprocess module to run external commands like ffmpeg
 
 run = True  # Initialize a flag to control the main loop
 while run:
     # Presenting the user with a menu of options
-    menu = input('What would you like to do: \n 1) Convert to different resolution \n 2) Change format \n 3) Change the file type \n 4) Stream video via UDP \n 5) Stream from webcam to another device via UDP \n 6) Recive a stream \nQ) Exit the programme \n')
+    menu = input('What would you like to do: \n 1) Convert to different resolution \n 2) Change format \n 3) Change the file type \n 4) Stream video via UDP \n 5) Stream from webcam to another device via UDP \n 6) Receive a stream \nQ) Exit the programme \n')
 
     if menu == 'Q':  # Check if the user wants to quit
         confirm = input('Are you sure you would like to quit the programme [Y/N] ')
@@ -111,11 +111,11 @@ while run:
         ])
     
     
-    if menu == '6':  # Option 1: Receive Encrypted UDP Stream and Decrypt Locally
+    if menu == '6':  # Option 6: Receive Encrypted UDP Stream and Decrypt Locally
         udp_ip = input('Enter the UDP IP address (e.g., 127.0.0.1): ')  # Get the target IP address for streaming
         udp_port = input('Enter the UDP port (e.g., 1234): ')  # Get the target port for streaming
         encryption_key = input('Enter the encryption key (the same key used for encryption): ')  # Get the encryption key
 
-        # Use ffmpeg to receive the encrypted UDP stream
+        # Use ffplay to play the encrypted UDP stream
         subprocess.run([
             'ffplay', f'udp://{udp_ip}:{udp_port}?key={encryption_key}'])
