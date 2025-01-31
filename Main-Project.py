@@ -43,8 +43,9 @@ while run:
         
         # Use ffplay to preview the newly converted file
         subprocess.run(['ffplay', newtype])
+    
 
-    if menu == '4':  # Option 4: Stream a video file via Encrypted UDP to local process
+    if menu == '4':  # Option 4: Stream a video file via UDP (Improved packet loss handling)
         filen = input('What file would you like to stream: ')  # Get the file name to stream
 
         # Get the current resolution of the video using ffprobe
@@ -52,7 +53,7 @@ while run:
             ['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=s=x:p=0', filen],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
-        
+
         resolution = result.stdout.decode('utf-8').strip()  # Extract resolution in 'widthxheight' format (e.g., 1920x1080)
         print(f"Current resolution: {resolution}")
 
@@ -67,8 +68,8 @@ while run:
         udp_ip = input('Enter the UDP IP address (e.g., 127.0.0.1): ')  # Get the target IP address for streaming
         udp_port = input('Enter the UDP port (e.g., 1234): ')  # Get the target port for streaming
         encryption_key = input('Enter the encryption key (a long string for encryption): ')  # Get the encryption key
-        
-        # Use ffmpeg to stream the video over UDP with the adjusted resolution and encryption
+
+        # Use ffmpeg to stream the video over UDP with improved parameters
         subprocess.run([
             'ffmpeg',
             '-i', filen,                             # Input file
@@ -83,6 +84,7 @@ while run:
             '-r', '30',                              # Frame rate
             '-pkt_size', '1316',                     # Set packet size to reduce packet loss
             '-flush_packets', '1',                   # Flush packets immediately
+            '-buffer_size', '1024000',               # Increase buffer size to prevent packet loss
             '-metadata', f'key={encryption_key}',    # Add the encryption key as metadata
             f'udp://{udp_ip}:{udp_port}'             # UDP destination URL
         ])
